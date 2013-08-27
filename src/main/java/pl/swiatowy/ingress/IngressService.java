@@ -121,11 +121,12 @@ public class IngressService {
                 }
             });
             for (CommCallResult.CommEntry playerEntry : playerEntries) {
-                if (actionSummary.containsKey(playerEntry.getAction())) {
-                    Integer currentCount = actionSummary.get(playerEntry.getAction());
-                    actionSummary.put(CommAction.fromActionName(playerEntry.getAction()), currentCount + 1);
+                CommAction action = CommAction.fromActionName(playerEntry.getAction());
+                if (actionSummary.containsKey(action)) {
+                    Integer currentCount = actionSummary.get(action);
+                    actionSummary.put(action, currentCount + 1);
                 } else {
-                    actionSummary.put(CommAction.fromActionName(playerEntry.getAction()), 1);
+                    actionSummary.put(action, 1);
                 }
             }
         }
