@@ -1,6 +1,9 @@
 package pl.swiatowy.ingress.actions;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import org.apache.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -24,7 +27,7 @@ import java.io.UnsupportedEncodingException;
 public enum Action implements Config {
     COMM_CALL("http://www.ingress.com/rpc/dashboard.getPaginatedPlextsV2") {
         @Override
-        JsonObject getData(ActionParam param) {
+        JsonElement getData(ActionParam param) {
             CommCallParam params = CommCallParam.class.cast(param);
             JsonObject data = new JsonObject();
             data.addProperty("method", getRpcAddress());
@@ -48,17 +51,11 @@ public enum Action implements Config {
     },
     GET_PLAYER_STATS_CALL("http://www.ingress.com/rpc/dashboard.getPlayerProfile") {
         @Override
-        JsonObject getData(ActionParam param) {
+        JsonElement getData(ActionParam param) {
             PlayerStatsParam params = (PlayerStatsParam) param;
             JsonObject data = new JsonObject();
             data.addProperty("method", getRpcAddress());
-            JsonObject playerInfo = new JsonObject();
-            playerInfo.addProperty("plain", params.getPlayer());
-            playerInfo.addProperty("guid", "6f7e488a1ded4d6bb03de9a897ebad20.c");
-            playerInfo.addProperty("team", "ENLIGHTENED");
-            data.add("playerProfile", playerInfo);
-//                        data.addProperty("playerProfile", params.getPlayer());
-            //[["PLAYER",{"plain":"soltar","guid":"6f7e488a1ded4d6bb03de9a897ebad20.c","team":"ENLIGHTENED"}]
+            data.addProperty("id", params.getPlayer());
             return data;
         }
 
@@ -78,7 +75,7 @@ public enum Action implements Config {
 
     private final String rpcAddress;
 
-    abstract JsonObject getData(ActionParam param);
+    abstract JsonElement getData(ActionParam param);
 
     public abstract <T extends ActionResult> T getResult(HttpEntity resultEntity) throws IOException;
 
@@ -94,9 +91,9 @@ public enum Action implements Config {
         HttpPost post = new HttpPost(rpcAddress);
         post.setHeaders(REQUIRED_HEADER);
         try {
-            JsonObject data = getData(param);
-            System.out.println(data.toString());
-            post.setEntity(new StringEntity(data.toString()));
+            String data = getData(param).toString();
+            System.out.println(data);
+            post.setEntity(new StringEntity(data));
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
@@ -118,16 +115,5 @@ public enum Action implements Config {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static void main(String[] args) {
-        //[["PLAYER",{"plain":"soltar","guid":"6f7e488a1ded4d6bb03de9a897ebad20.c","":"ENLIGHTENED"}]
-        JsonObject player = new JsonObject();
-        JsonObject playerInfo = new JsonObject();
-        playerInfo.addProperty("plain", "soltar");
-        playerInfo.addProperty("guid", "6f7e488a1ded4d6bb03de9a897ebad20.c");
-        playerInfo.addProperty("team", "ENLIGHTENED");
-        player.add("PLAYER", playerInfo);
-        System.out.println(player);
     }
 }
