@@ -19,8 +19,8 @@ public class IngressServiceTest {
     @Test
     public void getPlayerAP_fromCommEntries() {
         IngressService service = getIngressService();
-        Calendar from = new GregorianCalendar(2013, 7, 25, 13, 00, 00);
-        Calendar to = new GregorianCalendar(2013, 7, 25, 17, 00, 00);
+        Calendar from = new GregorianCalendar(2013, 7, 31, 8, 30, 0);
+        Calendar to = new GregorianCalendar(2013, 7, 31, 9, 30, 0);
         long start = System.currentTimeMillis();
         PlayerAP playerAP = service.getPlayerAP("soltar", from.getTime(), to.getTime());
         System.out.println(playerAP.getActionSummary());
@@ -39,8 +39,8 @@ public class IngressServiceTest {
     @Test
     public void getCommEntries_from_to_preset() {
         IngressService service = getIngressService();
-        Calendar from = new GregorianCalendar(2013, 7, 27, 21, 27, 12);
-        Calendar to = new GregorianCalendar(2013, 7, 27, 21, 27, 13);
+        Calendar from = new GregorianCalendar(2013, 7, 27, 21, 0, 0);
+        Calendar to = new GregorianCalendar(2013, 7, 27, 22, 0, 0);
         long start = System.currentTimeMillis();
         List<CommCallResult.CommEntry> entries = service.getCommEntries(from.getTime(), to.getTime());
         long end = System.currentTimeMillis();
@@ -53,7 +53,7 @@ public class IngressServiceTest {
     @Test
     public void getCommEntries_from_to_current_date() {
         IngressService service = getIngressService();
-        Calendar from = new GregorianCalendar(2013, 7, 27, 22, 00, 00);
+        Calendar from = new GregorianCalendar(2013, 7, 27, 22, 0, 0);
         long start = System.currentTimeMillis();
         List<CommCallResult.CommEntry> entries = service.getCommEntries(from.getTime());
         long end = System.currentTimeMillis();

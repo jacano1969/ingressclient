@@ -96,8 +96,7 @@ public class IngressService {
         private List<CommCallResult.CommEntry> getComm(CommCallParam params) {
             params.setNumberOfEntries(MAX_ENTRIES);
             CommCallResult commCallResult = (CommCallResult) Action.COMM_CALL.execute(params);
-            List<CommCallResult.CommEntry> commLines = commCallResult.getCommLines();
-            return commLines;
+            return commCallResult.getCommLines();
         }
     }
 
